@@ -13,7 +13,7 @@ int main() {
 	sf::ContextSettings settings;
 	settings.antiAliasingLevel = 8;
 
-	sf::RenderWindow window(sf::VideoMode({600, 600}), "TRIANGLE GAME", sf::State::Windowed, settings);
+	sf::RenderWindow window(sf::VideoMode({900, 900}), "TRIANGLE GAME", sf::State::Windowed, settings);
 	sf::Clock clock;
 	clock.start();
 
@@ -27,7 +27,7 @@ int main() {
 
 	Enemy charger(
 		std::make_unique<sf::CircleShape>(16.0f),
-		std::make_unique<behaviors::Charger>(SmoothMover(1600.0f, 600.0f, 600.0f)),
+		std::make_unique<behaviors::Charger>(SmoothMover(2200.0f, 800.0f, 800.0f)),
 		sf::Color::Blue
 	);
 
