@@ -20,7 +20,6 @@ namespace behaviors {
 
 		SmoothMover smooth_mover;
 		sf::Vector2f velocity;
-		sf::Vector2f target;
 
 		enum class State {
 			TARGETING,
