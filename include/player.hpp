@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <SFML/Graphics.hpp>
 
 #include "smooth_mover.hpp"
@@ -7,15 +9,17 @@
 class Player : public sf::Drawable {
 public:
 
-	Player(sf::Vector2f initial_position, float width, float height, float indent_width_proportion);
+	Player(std::unique_ptr<sf::Shape> shape);
 	void update(float delta_time);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	sf::Vector2f get_position() const;
+	inline sf::Vector2f get_position() const {
+		return this->shape->getPosition();
+	}
 
 private:
 
-	sf::ConvexShape shape;
+	std::unique_ptr<sf::Shape> shape;
 	SmoothMover smooth_mover;
 	sf::Vector2f velocity;
 };

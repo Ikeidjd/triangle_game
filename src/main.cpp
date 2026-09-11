@@ -1,7 +1,11 @@
 #include <iostream>
+#include <memory>
 
 #include <SFML/Graphics.hpp>
 
+#include "shapes/pseudo_triangle.hpp"
+#include "behaviors/chaser.hpp"
+#include "behaviors/charger.hpp"
 #include "player.hpp"
 #include "enemy.hpp"
 
@@ -13,8 +17,19 @@ int main() {
 	sf::Clock clock;
 	clock.start();
 
-	Player player(static_cast<sf::Vector2f>(window.getSize()) * 0.5f, 40, 40, 0.25);
-	Enemy enemy({0.0f, 0.0f}, 30, 30, 0.25);
+	Player player(std::make_unique<shapes::PseudoTriangle>(static_cast<sf::Vector2f>(window.getSize()) * 0.5f, 40, 40, 0.25));
+
+	Enemy chaser(
+		std::make_unique<shapes::PseudoTriangle>(sf::Vector2f(), 30, 30, 0.25),
+		std::make_unique<behaviors::Chaser>(SmoothMover(900.0f, 300.0f, 300.0f)),
+		sf::Color::Red
+	);
+
+	Enemy charger(
+		std::make_unique<sf::CircleShape>(16.0f),
+		std::make_unique<behaviors::Charger>(SmoothMover(1600.0f, 600.0f, 600.0f)),
+		sf::Color::Blue
+	);
 
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
@@ -26,12 +41,14 @@ int main() {
 		float delta_time = clock.restart().asSeconds();
 
 		player.update(delta_time);
-		enemy.update(delta_time, player.get_position());
+		chaser.update(delta_time, player.get_position());
+		charger.update(delta_time, player.get_position());
 
 		window.clear();
 
 		window.draw(player);
-		window.draw(enemy);
+		window.draw(chaser);
+		window.draw(charger);
 
 		window.display();
 	}
