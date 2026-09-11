@@ -17,5 +17,6 @@ file(GLOB_RECURSE SRC_FILES src/*.cpp)
 add_executable(triangle_game ${SRC_FILES})
 target_compile_features(triangle_game PRIVATE cxx_std_17)
 target_link_libraries(triangle_game PRIVATE SFML::Graphics)
+target_include_directories(triangle_game PRIVATE include)
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT triangle_game)
