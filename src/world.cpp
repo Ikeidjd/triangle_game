@@ -1,6 +1,7 @@
 #include "world.hpp"
 
-#include <algorithm>
+#include <cmath>
+#include <random>
 
 #include "shapes/pseudo_triangle.hpp"
 #include "behaviors/chaser.hpp"
@@ -21,10 +22,14 @@ World::World(const sf::RenderWindow& window) : player(std::make_unique<shapes::P
 
     this->summon(std::move(chaser));
     this->summon(std::move(charger));
+
+    this->randomize_background_color();
+    this->randomize_background_color();
 }
 
 void World::update(float delta_time, const sf::RenderWindow& window) {
     this->mouse_world_coords = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+    this->update_background_color(delta_time);
 
     this->player.update(delta_time, *this);
 
@@ -40,6 +45,7 @@ void World::update(float delta_time, const sf::RenderWindow& window) {
 }
 
 void World::draw(sf::RenderWindow& window) const {
+    window.clear(this->background_color);
     window.draw(this->player);
 
     for (const Enemy& enemy : this->enemies) {
@@ -56,7 +62,7 @@ void World::press_mouse_button(sf::Mouse::Button button) {
 }
 
 bool World::is_mouse_button_just_pressed(sf::Mouse::Button button) {
-    return this->mouse_buttons_pressed.find(button) != this->mouse_buttons_pressed.end();
+    return this->mouse_buttons_pressed.contains(button);
 }
 
 void World::summon(Enemy&& enemy) {
@@ -65,4 +71,25 @@ void World::summon(Enemy&& enemy) {
 
 void World::shoot(Bullet&& bullet) {
     this->bullets.push_back(std::move(bullet));
+}
+
+void World::randomize_background_color() {
+    this->background_color_from = this->background_color_to;
+    this->background_color = this->background_color_to;
+    this->background_color_percent = 0.0f;
+
+    std::mt19937 a(std::time(NULL));
+    this->background_color_to = sf::Color(a(), a(), a());
+}
+
+void World::update_background_color(float delta_time) {
+    this->background_color.r = std::lerp(this->background_color_from.r, this->background_color_to.r, this->background_color_percent);
+    this->background_color.g = std::lerp(this->background_color_from.g, this->background_color_to.g, this->background_color_percent);
+    this->background_color.b = std::lerp(this->background_color_from.b, this->background_color_to.b, this->background_color_percent);
+
+    this->background_color_percent += 0.5f * delta_time;
+
+    if (this->background_color_percent >= 1.0f) {
+        this->randomize_background_color();
+    }
 }

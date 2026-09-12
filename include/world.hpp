@@ -45,4 +45,12 @@ private:
     Player player;
     std::vector<Enemy> enemies;
     std::vector<Bullet> bullets;
+
+    sf::Color background_color;
+    sf::Color background_color_from;
+    sf::Color background_color_to;
+    float background_color_percent;
+
+    void randomize_background_color();
+    void update_background_color(float delta_time);
 };
