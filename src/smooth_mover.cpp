@@ -4,6 +4,13 @@ SmoothMover::SmoothMover(float acceleration, float dampening, float max_speed) :
 
 void SmoothMover::move(float delta_time, sf::Transformable& transformable, sf::Vector2f& velocity, sf::Vector2f dir) {
     if (dir != sf::Vector2f(0.0f, 0.0f)) {
+        // Normally, when the character turns around, it accelerates towards the new direction, creating a smooth rotation
+        // If the character's velocity is 0, though, this rotation happens instantly, which looks pretty bad
+        // This check fixes that (unless the character is turning exactly to the complete opposite direction)
+        if (velocity == sf::Vector2f(0.0f, 0.0f)) {
+            velocity = sf::Vector2f(this->max_speed * 0.1f, transformable.getRotation());
+        }
+
         velocity += dir.normalized() * this->acceleration * delta_time;
     } else if (velocity != sf::Vector2f(0.0f, 0.0f)) {
         sf::Vector2f old_velocity = velocity;

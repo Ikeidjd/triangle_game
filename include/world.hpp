@@ -34,7 +34,7 @@ public:
         return this->bullets;
     }
 
-    inline const sf::Vector2f get_mouse_world_coords() const {
+    inline sf::Vector2f get_mouse_world_coords() const {
         return this->mouse_world_coords;
     }
 
