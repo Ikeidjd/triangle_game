@@ -6,11 +6,13 @@
 
 #include "smooth_mover.hpp"
 
+class World;
+
 class Player : public sf::Drawable {
 public:
 
 	Player(std::unique_ptr<sf::Shape> shape);
-	void update(float delta_time);
+	void update(float delta_time, World& world);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	inline sf::Vector2f get_position() const {

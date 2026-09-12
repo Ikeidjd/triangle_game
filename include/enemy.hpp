@@ -6,11 +6,13 @@
 
 #include "behaviors/behavior.hpp"
 
+class World;
+
 class Enemy : public sf::Drawable {
 public:
 
     Enemy(std::unique_ptr<sf::Shape> shape, std::unique_ptr<behaviors::Behavior> behavior, sf::Color color);
-    void update(float delta_time, sf::Vector2f player_pos);
+    void update(float delta_time, World& world);
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:

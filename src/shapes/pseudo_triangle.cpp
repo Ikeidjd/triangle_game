@@ -8,7 +8,6 @@ namespace shapes {
         this->setPoint(2, {width * indent_width_proportion, height * 0.5f});
         this->setPoint(3, {0.0f, 0.0f});
 
-        this->setOrigin(this->getLocalBounds().size * 0.5f);
         this->setPosition(initial_position);
     }
 
